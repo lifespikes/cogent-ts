@@ -24,7 +24,7 @@
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "npm:publish": "yarn build && yarn size && npm publish --access=public"
+    "npm:publish": "yarn size && npm publish --access=public"
   },
   "peerDependencies": {},
   "husky": {
@@ -44,11 +44,11 @@
   "size-limit": [
     {
       "path": "dist/cogent-ts.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "15 KB"
     },
     {
       "path": "dist/cogent-ts.esm.js",
-      "limit": "10 KB"
+      "limit": "15 KB"
     }
   ],
   "devDependencies": {

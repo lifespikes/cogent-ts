@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "CogentJS TypeScript version.",
   "license": "MIT",
   "main": "dist/index.js",
@@ -60,11 +60,20 @@
     "typescript": "^4.9.5",
     "@types/qs": "^6.9.7"
   },
+  "resolutions": {
+    "**/@typescript-eslint/eslint-plugin": "^5.51.0",
+    "**/@typescript-eslint/parser": "^5.51.0",
+    "**/typescript": "^4.9.5"
+  },
   "dependencies": {
     "qs": "^6.11.0"
   },
   "bugs": {
     "url": "https://github.com/lifespikes/cogent-ts/issues"
   },
-  "homepage": "https://github.com/lifespikes/cogent-ts#readme"
+  "homepage": "https://github.com/lifespikes/cogent-ts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lifespikes/cogent-ts.git"
+  }
 }

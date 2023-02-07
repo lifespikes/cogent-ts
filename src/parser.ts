@@ -1,14 +1,14 @@
+import { ParserQuery } from './types';
 import qs from 'qs';
-import { ParseQuery } from './types';
 
 export default class Parser<
   T extends Record<string, string>,
   K extends keyof T
 > {
-  query: ParseQuery<T, K>;
+  query: ParserQuery<T, K>;
   uri: string;
 
-  constructor(query: ParseQuery<T, K>) {
+  constructor(query: ParserQuery<T, K>) {
     this.query = query;
     this.uri = '';
   }

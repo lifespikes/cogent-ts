@@ -1,7 +1,3 @@
-import Query from './query';
-
-export type QueryType = typeof Query.prototype;
-
 export type ParamsType =
   | 'filters'
   | 'fields'
@@ -13,6 +9,19 @@ export type ParamsType =
 
 export type QueryParams = {
   [key in ParamsType | string]: string;
+};
+
+export type ParserQuery<T extends Record<string, string | number>, K extends keyof T> = {
+  append: KeyOfOrString<T, K>[];
+  include: KeyOfOrString<T, K>[];
+  fields: QueryFields;
+  sorts: KeyOfOrString<T, K>[];
+  filters: QueryFilters<T, K>;
+  queryParams: QueryParams;
+  model: string | null;
+  paramsObj: Record<string, string> | null;
+  pageNumber: number | null;
+  limitNumber: number | null;
 };
 
 export type QueryOptions = {
@@ -38,21 +47,8 @@ export type KeyOfOrString<
   K extends keyof T
 > = K | string;
 
-
 export type KeyOfOrStringSort<
   T extends Record<string, string | number>,
   K extends keyof T = keyof T | string
-> = K | `-${K extends string ? K : never}` | string;
-
-export type ParseQuery<T extends Record<string, string | number>, K extends keyof T> = {
-  append: KeyOfOrString<T, K>[];
-  include: KeyOfOrString<T, K>[];
-  fields: QueryFields;
-  sorts: KeyOfOrString<T, K>[];
-  filters: QueryFilters<T, K>;
-  queryParams: QueryParams;
-  model: string | null;
-  paramsObj: Record<string, string> | null;
-  pageNumber: number | null;
-  limitNumber: number | null;
-};
+// eslint-disable-next-line prettier/prettier
+> = K | `-${K extends string ? K : string}` | string;

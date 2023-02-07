@@ -16,7 +16,11 @@ describe('Query Builder', () => {
         fields: 'select',
       },
     });
-    const query = builder().forModel('pizza').includes(['toppings']).select(['name']).get();
+    const query = builder()
+      .forModel('pizza')
+      .includes(['toppings'])
+      .select(['name'])
+      .get();
     const expected = '/pizza?includes=toppings&select[pizza]=name';
 
     expect(query).toEqual(expected);
@@ -27,7 +31,10 @@ describe('Query Builder', () => {
       baseUrl: 'https://example.com',
     });
     const expected = 'https://example.com/pizza?include=toppings';
-    const query = builder().forModel('pizza').includes(['toppings']).get();
+    const query = builder()
+      .forModel('pizza')
+      .includes(['toppings'])
+      .get();
 
     expect(query).toEqual(expected);
   });
@@ -37,23 +44,33 @@ describe('Query Builder', () => {
     try {
       const builder = queryBuilder();
 
-      builder().includes(['toppings']).get();
+      builder()
+        .includes(['toppings'])
+        .get();
     } catch (error) {
-      expect((error as any).message as string).toBe('A base url or model must be provided before building the query.');
+      expect((error as any).message as string).toBe(
+        'A base url or model must be provided before building the query.'
+      );
     }
   });
 
   it('builds a simple query with appends()', () => {
     const builder = queryBuilder();
     const expected = '/pizza?append=full_name,rating';
-    const query = builder().forModel('pizza').appends(['full_name', 'rating']).get();
+    const query = builder()
+      .forModel('pizza')
+      .appends(['full_name', 'rating'])
+      .get();
 
     expect(query).toEqual(expected);
   });
 
   it('builds a simple query with includes()', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').includes(['toppings']).get();
+    const query = builder()
+      .forModel('pizza')
+      .includes(['toppings'])
+      .get();
     const expected = '/pizza?include=toppings';
 
     expect(query).toEqual(expected);
@@ -61,7 +78,10 @@ describe('Query Builder', () => {
 
   it('builds a simple query with where()', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').where('topping', 'cheese').get();
+    const query = builder()
+      .forModel('pizza')
+      .where('topping', 'cheese')
+      .get();
     const expected = '/pizza?filter[topping]=cheese';
 
     expect(query).toEqual(expected);
@@ -69,7 +89,10 @@ describe('Query Builder', () => {
 
   it('builds a simple query with whereIn()', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').whereIn('topping', ['beef', 'cheese']).get();
+    const query = builder()
+      .forModel('pizza')
+      .whereIn('topping', ['beef', 'cheese'])
+      .get();
     const expected = '/pizza?filter[topping]=beef,cheese';
 
     expect(query).toEqual(expected);
@@ -77,7 +100,10 @@ describe('Query Builder', () => {
 
   it('builds a simple query with select()', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').select(['name', 'date_added']).get();
+    const query = builder()
+      .forModel('pizza')
+      .select(['name', 'date_added'])
+      .get();
     const expected = '/pizza?fields[pizza]=name,date_added';
 
     expect(query).toEqual(expected);
@@ -85,7 +111,11 @@ describe('Query Builder', () => {
 
   it('can limit the query', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').where('name', 'meatlovers').limit(5).get();
+    const query = builder()
+      .forModel('pizza')
+      .where('name', 'meatlovers')
+      .limit(5)
+      .get();
     const expected = '/pizza?filter[name]=meatlovers&limit=5';
 
     expect(query).toEqual(expected);
@@ -93,7 +123,11 @@ describe('Query Builder', () => {
 
   test('can paginate the query', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').limit(5).page(2).get();
+    const query = builder()
+      .forModel('pizza')
+      .limit(5)
+      .page(2)
+      .get();
     const expected = '/pizza?page=2&limit=5';
 
     expect(query).toEqual(expected);
@@ -102,7 +136,10 @@ describe('Query Builder', () => {
   test('it can sort the query', () => {
     const builder = queryBuilder();
 
-    const query = builder().forModel('pizza').sort(['-name', 'flavour']).get();
+    const query = builder()
+      .forModel('pizza')
+      .sort(['-name', 'flavour'])
+      .get();
     const expected = '/pizza?sort=-name,flavour';
 
     expect(query).toEqual(expected);
@@ -110,7 +147,11 @@ describe('Query Builder', () => {
 
   it('can append params', () => {
     const builder = queryBuilder();
-    const query = builder().forModel('pizza').where('name', 'meatlovers').params({ format: 'admin' }).get();
+    const query = builder()
+      .forModel('pizza')
+      .where('name', 'meatlovers')
+      .params({ format: 'admin' })
+      .get();
     const expected = '/pizza?filter[name]=meatlovers&format=admin';
 
     expect(query).toEqual(expected);
@@ -119,11 +160,17 @@ describe('Query Builder', () => {
   it('the query object can be reused', () => {
     const builder = queryBuilder();
 
-    const actualOne = builder().forModel('pizza').where('name', 'macaroni_and_cheese').get();
+    const actualOne = builder()
+      .forModel('pizza')
+      .where('name', 'macaroni_and_cheese')
+      .get();
 
     const expectedOne = '/pizza?filter[name]=macaroni_and_cheese';
 
-    const actualTwo = builder().forModel('pizza').where('name', 'meatlovers').get();
+    const actualTwo = builder()
+      .forModel('pizza')
+      .where('name', 'meatlovers')
+      .get();
 
     const expectedTwo = '/pizza?filter[name]=meatlovers';
 

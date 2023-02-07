@@ -1,4 +1,11 @@
-export type ParamsType = 'filters' | 'fields' | 'includes' | 'sort' | 'page' | 'limit' | 'appends';
+export type ParamsType =
+  | 'filters'
+  | 'fields'
+  | 'includes'
+  | 'sort'
+  | 'page'
+  | 'limit'
+  | 'appends';
 
 export type QueryParams = {
   [key in ParamsType | string]: string;
@@ -32,7 +39,9 @@ export type QueryFilters<T extends Record<string, string | number>> = {
   [key in keyof T | string | number]: string;
 };
 
-export type KeyOfOrString<T extends Record<string, string | number>> = keyof T | string;
+export type KeyOfOrString<T extends Record<string, string | number>> =
+  | keyof T
+  | string;
 
 export type KeyOfOrStringSort<T extends Record<string, string | number>> =
   | keyof T

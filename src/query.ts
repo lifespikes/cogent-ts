@@ -1,11 +1,4 @@
-import {
-  KeyOfOrString,
-  KeyOfOrStringSort,
-  QueryFields,
-  QueryFilters,
-  QueryOptions,
-  QueryParams,
-} from './types';
+import { KeyOfOrString, KeyOfOrStringSort, QueryFields, QueryFilters, QueryOptions, QueryParams } from './types';
 import Parser from './parser';
 
 export default class Query<T extends Record<string, string | number>> {
@@ -70,9 +63,7 @@ export default class Query<T extends Record<string, string | number>> {
 
   private getBaseUrl() {
     if (!this.baseUrl && !this.model) {
-      throw new Error(
-        'A base url or model must be provided before building the query.'
-      );
+      throw new Error('A base url or model must be provided before building the query.');
     }
 
     if (this.model && this.baseUrl) {
@@ -85,10 +76,7 @@ export default class Query<T extends Record<string, string | number>> {
 
     const model = this.baseUrl?.split('/').at(-1);
 
-    const baseUrlWithOutLastSlash = this.baseUrl
-      ?.split('/')
-      .slice(0, -1)
-      .join('/');
+    const baseUrlWithOutLastSlash = this.baseUrl?.split('/').slice(0, -1).join('/');
 
     return `${baseUrlWithOutLastSlash}/${model}`;
   }

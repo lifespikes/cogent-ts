@@ -32,9 +32,7 @@ export default class Parser<T extends Record<string, string | number>> {
       return;
     }
 
-    this.uri += `${this.prepend() + this.query.queryParams.includes}=${
-      this.query.include
-    }`;
+    this.uri += `${this.prepend() + this.query.queryParams.includes}=${this.query.include}`;
   }
 
   appends() {
@@ -42,9 +40,7 @@ export default class Parser<T extends Record<string, string | number>> {
       return;
     }
 
-    this.uri += `${this.prepend() + this.query.queryParams.appends}=${
-      this.query.append
-    }`;
+    this.uri += `${this.prepend() + this.query.queryParams.appends}=${this.query.append}`;
   }
 
   fields() {
@@ -53,8 +49,7 @@ export default class Parser<T extends Record<string, string | number>> {
     }
 
     const fields = {
-      [`${this.query.queryParams.fields}[${this.query.model}]`]: this.query
-        .fields,
+      [`${this.query.queryParams.fields}[${this.query.model}]`]: this.query.fields,
     };
 
     this.uri += this.prepend() + qs.stringify(fields, { encode: false });
@@ -77,9 +72,7 @@ export default class Parser<T extends Record<string, string | number>> {
       return;
     }
 
-    this.uri += `${this.prepend() + this.query.queryParams.sort}=${
-      this.query.sorts
-    }`;
+    this.uri += `${this.prepend() + this.query.queryParams.sort}=${this.query.sorts}`;
   }
 
   page() {
@@ -87,9 +80,7 @@ export default class Parser<T extends Record<string, string | number>> {
       return;
     }
 
-    this.uri += `${this.prepend() + this.query.queryParams.page}=${
-      this.query.pageNumber
-    }`;
+    this.uri += `${this.prepend() + this.query.queryParams.page}=${this.query.pageNumber}`;
   }
 
   limit() {
@@ -97,9 +88,7 @@ export default class Parser<T extends Record<string, string | number>> {
       return;
     }
 
-    this.uri += `${this.prepend() + this.query.queryParams.limit}=${
-      this.query.limitNumber
-    }`;
+    this.uri += `${this.prepend() + this.query.queryParams.limit}=${this.query.limitNumber}`;
   }
 
   params() {
@@ -107,7 +96,6 @@ export default class Parser<T extends Record<string, string | number>> {
       return;
     }
 
-    this.uri +=
-      this.prepend() + qs.stringify(this.query.paramsObj, { encode: false });
+    this.uri += this.prepend() + qs.stringify(this.query.paramsObj, { encode: false });
   }
 }

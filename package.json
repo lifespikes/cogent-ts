@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CogentJS TypeScript version.",
   "license": "MIT",
   "main": "dist/index.js",
@@ -11,6 +11,11 @@
   "engines": {
     "node": ">=10"
   },
+  "keywords": [
+    "typescript",
+    "query-builder",
+    "laravel-query-builder"
+  ],
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
@@ -57,5 +62,9 @@
   },
   "dependencies": {
     "qs": "^6.11.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/lifespikes/cogent-ts/issues"
+  },
+  "homepage": "https://github.com/lifespikes/cogent-ts#readme"
 }

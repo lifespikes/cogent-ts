@@ -26,18 +26,30 @@ export type QueryFields =
     }
   | string;
 
-export type QueryFilters<K extends string | number | symbol> = {
+export type QueryFilters<
+  T extends Record<string, string | number>,
+  K extends keyof T
+> = {
   [key in K | string | number]: string;
 };
 
-export type KeyOfOrString<K extends string | number | symbol> = K | string;
+export type KeyOfOrString<
+  T extends Record<string, string | number>,
+  K extends keyof T
+> = K | string;
 
-export type ParseQuery<K extends string | number | symbol> = {
-  append: KeyOfOrString<K>[];
-  include: KeyOfOrString<K>[];
+
+export type KeyOfOrStringSort<
+  T extends Record<string, string | number>,
+  K extends keyof T = keyof T | string
+> = K | `-${K extends string ? K : never}` | string;
+
+export type ParseQuery<T extends Record<string, string | number>, K extends keyof T> = {
+  append: KeyOfOrString<T, K>[];
+  include: KeyOfOrString<T, K>[];
   fields: QueryFields;
-  sorts: KeyOfOrString<K>[];
-  filters: QueryFilters<K>;
+  sorts: KeyOfOrString<T, K>[];
+  filters: QueryFilters<T, K>;
   queryParams: QueryParams;
   model: string | null;
   paramsObj: Record<string, string> | null;

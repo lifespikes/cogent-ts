@@ -1,5 +1,6 @@
 import {
   KeyOfOrString,
+  KeyOfOrStringSort,
   QueryFields,
   QueryFilters,
   QueryOptions,
@@ -8,17 +9,17 @@ import {
 import Parser from './parser';
 
 export default class Query<
-  T,
-  K extends string | number | symbol = keyof T | string
+  T extends Record<string, string>,
+  K extends keyof T
 > {
   private readonly baseUrl: QueryOptions['baseUrl'];
   private model: string | null = null;
   private readonly queryParams: QueryParams;
-  private include: KeyOfOrString<K>[] = [];
-  private append: KeyOfOrString<K>[] = [];
-  private sorts: KeyOfOrString<K>[] = [];
+  private include: KeyOfOrString<T, K>[] = [];
+  private append: KeyOfOrString<T, K>[] = [];
+  private sorts: KeyOfOrString<T, K>[] = [];
   private fields: QueryFields = {};
-  private filters: QueryFilters<K> = {} as QueryFilters<K>;
+  private filters: QueryFilters<T, K> = {} as QueryFilters<T, K>;
   private pageNumber: number | null = null;
   private limitNumber: number | null = null;
   private paramsObj: Record<string, string> | null = null;
@@ -45,7 +46,7 @@ export default class Query<
   }
 
   private parser() {
-    return new Parser<K>({
+    return new Parser<T, K>({
       filters: this.filters,
       fields: this.fields,
       include: this.include,
@@ -99,19 +100,19 @@ export default class Query<
     return this.getBaseUrl() + this.parser().parse();
   }
 
-  includes(include: KeyOfOrString<K>[]) {
+  includes(include: KeyOfOrString<T, K>[]) {
     this.include = include;
 
     return this;
   }
 
-  appends(append: KeyOfOrString<K>[]) {
+  appends(append: KeyOfOrString<T, K>[]) {
     this.append = append;
 
     return this;
   }
 
-  select(fields: KeyOfOrString<K>[] | Record<string, string[]>) {
+  select(fields: KeyOfOrString<T, K>[] | Record<string, string[]>) {
     if (Array.isArray(fields)) {
       this.fields = fields.join(',');
 
@@ -128,22 +129,26 @@ export default class Query<
     return this;
   }
 
-  where(key: K, value: string) {
+  where(key: KeyOfOrString<T, K>, value: string) {
     this.filters[key] = value;
 
     return this;
   }
 
-  whereIn(key: K | number, array: string[]) {
+  whereIn(key: KeyOfOrString<T, K>, array: string[]) {
     this.filters[key] = array.join(',');
 
     return this;
   }
 
-  sort(sorts: K[]) {
+  sort(sorts: KeyOfOrStringSort<T, K>[]) {
     this.sorts = sorts;
 
     return this;
+  }
+
+  orderBy(sorts: KeyOfOrStringSort<T, K>[]) {
+    return this.sort(sorts);
   }
 
   page(pageNumber: number) {

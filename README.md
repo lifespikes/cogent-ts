@@ -1,103 +1,111 @@
-# TSDX User Guide
+# CogentTS
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+### A TypeScript version of [CogentJS](https://github.com/joelwmale/cogent-js) made by [Joel Male](https://github.com/joelwmale)
 
-> This TSDX setup is meant for developing libraries (not apps!) that can be published to NPM. If you’re looking to build a Node app, you could use `ts-node-dev`, plain `ts-node`, or simple `tsc`.
+---
+## Basic Usage
 
-> If you’re new to TypeScript, checkout [this handy cheatsheet](https://devhints.io/typescript)
+To use CogentTS, it's pretty simple. You just need to import the library and create a new instance of the Cogent class.
 
-## Commands
+```typescript
+import { queryBuilder } from '@lifespikes/cogent-ts';
 
-TSDX scaffolds your new library inside `/src`.
+const builder = queryBuilder();
 
-To run TSDX, use:
-
-```bash
-npm start # or yarn start
+// /posts?filter[name]=Bob&include=posts,comments&orderBy=-created_at
+const url = builder()
+    .forModel('posts') // the model you're selecting
+	.where('name', 'Bob') // where the models `name` is 'Bob'
+	.includes(['posts', 'comments']) // include the models related relationships: posts and comments
+	.sort(['-created_at']) // order by -created_at desc
+	.get(); // generate the url and pass it into fetch!
 ```
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
+Also, `queryBuilder` receives a generic type that is the type of the model you're querying. This is used to provide type safety.
 
-To do a one-off build, use `npm run build` or `yarn build`.
+```typescript
+import { queryBuilder } from '@lifespikes/cogent-ts';
 
-To run tests, use `npm test` or `yarn test`.
-
-## Configuration
-
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`.
-
-### Bundle Analysis
-
-[`size-limit`](https://github.com/ai/size-limit) is set up to calculate the real cost of your library with `npm run size` and visualize the bundle with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
-```
-
-### Rollup
-
-TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
-
-### TypeScript
-
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
-
-## Continuous Integration
-
-### GitHub Actions
-
-Two actions are added by default:
-
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
-
-## Optimizations
-
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
+interface Post {
+    id: number;
+    title: string;
+    body: string;
 }
+
+const builder = queryBuilder<Post>();
+
+// /posts?filter[name]=Bob&include=posts,comments&orderBy=-created_at
+
+const url = builder()
+    .forModel('posts') // the model you're selecting
+    .where('name', 'Bob') // where the models `name` is 'Bob'
+    .includes(['posts', 'comments']) // include the models related relationships: posts and comments
+    .sort(['-created_at']) // order by -created_at desc
+    .get(); // generate the url and pass it into fetch!
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+## Installation
 
-## Module Formats
+### Npm
+```bash
+npm install @lifespikes/cogent-ts
+```
 
-CJS, ESModules, and UMD module formats are supported.
+### Yarn
+```bash
+yarn add @lifespikes/cogent-ts
+```
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+## Additional Configuration
+### Base URL
+If you want to set a base url for all of your queries, you can do so by passing it into the `queryBuilder` function.
 
-## Named Exports
+```typescript
+import { queryBuilder } from '@lifespikes/cogent-ts';
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+const builder = queryBuilder({
+    baseUrl: 'https://api.example.com'
+});
 
-## Including Styles
+// https://api.example.com/posts?filter[name]=Bob&include=posts,comments&orderBy=-created_at
+const url = builder()
+    .forModel('posts') // the model you're selecting
+    .where('name', 'Bob') // where the models `name` is 'Bob'
+    .includes(['posts', 'comments']) // include the models related relationships: posts and comments
+    .sort(['-created_at']) // order by -created_at desc
+    .get(); // generate the url and pass it into fetch!
+```
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
+## Available Methods
 
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+| Method     | Description                               | Example                                     |
+|------------|-------------------------------------------|---------------------------------------------|
+| `forModel` | The model you're querying.                | `builder().forModel('posts')`               |
+| `where`    | Where clause.                             | `builder().where('name', 'Bob')`            |
+| `includes` | Include the models related relationships. | `builder().includes(['posts', 'comments'])` |
+| `sort`     | Order by clause.                          | `builder().sort(['-created_at'])`           |
+| `orderBy`  | Same as `sort`                            | `builder().orderBy(['-created_at'])`        |
+| `select`   | Select specific fields.                   | `builder().select(['id', 'name'])`          |
+| `get`      | Generate the url.                         | `builder().get()`                           |
+| `appends`  | Append additional fields.                 | `builder().appends(['full_name'])`          |
+| `limit`    | Limit the number of results.              | `builder().limit(10)`                       |
+| `page`     | Paginate the results.                     | `builder().page(2)`                         |
+| `params`   | Add additional query params.              | `builder().params({ foo: 'bar' })`          |
 
-## Publishing to NPM
+## Customizing Query Parameters
+The query parameters can be customized by passing in an configuration object to the `queryBuilder` function.
 
-We recommend using [np](https://github.com/sindresorhus/np).
+```typescript
+import { queryBuilder } from '@lifespikes/cogent-ts';
+
+const builder = queryBuilder({
+    queryParams: {
+        include: 'include_custom',
+        filters: 'filter_custom',
+        sort: 'sort_custom',
+        fields: 'fields_custom',
+        append: 'append_custom',
+        page: 'page_custom',
+        limit: 'limit_custom'
+    }
+});

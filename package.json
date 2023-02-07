@@ -18,7 +18,8 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "npm:publish": "yarn build && yarn size && npm publish --access=public"
   },
   "peerDependencies": {},
   "husky": {
